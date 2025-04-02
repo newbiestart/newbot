@@ -13,4 +13,4 @@ def echo_all(message):
     bot.reply_to(message, message.text)
 
 print("Bot ishga tushdi...")
-bot.infinity_polling()
+bot.polling()

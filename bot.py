@@ -1,18 +1,17 @@
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+import os
+import telebot
 
-# Telegram bot tokeni
-TOKEN = '8059853294:AAGiOrtO3qjuHrrr8LUlfMASoWlqSDsiVEM'
+TOKEN = os.environ.get('TOKEN', '8059853294:AAGiOrtO3qjuHrrr8LUlfMASoWlqSDsiVEM')
 
-# /start komandasi uchun funksiya
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text('Salom! Bu mening Telegram botim!')
+bot = telebot.TeleBot(TOKEN)
 
-# Application va handler yaratish
-application = Application.builder().token(TOKEN).build()
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Salom! Men sizning yangi botingizman!")
 
-# Handlerni qo'shish
-application.add_handler(CommandHandler("start", start))
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, message.text)
 
-# Botni ishga tushurish
-application.run_polling()
+print("Bot ishga tushdi...")
+bot.infinity_polling()
